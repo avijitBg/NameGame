@@ -1,0 +1,103 @@
+<html>
+<head>
+    <title>Name Game</title>
+    <style>
+        .btn{
+            height: 50px;
+            width: 100px;
+            background-color: red;
+            color: white;
+            border-radius: 15px;
+            font-size: 24;
+        }
+        .box{
+            height: 100px;
+            width: 100px;
+            text-align: center;
+            border: 1px solid black;
+            display: inline-block;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+    <body>
+        <input id="sBtn" type="button" value="Start" onclick="start()" class="btn">
+        <div id="message1">Welcome</div>
+        <div id="message2">Click Start</div>
+        <div id="output"></div>
+        <script>
+            var myArray=[];
+            var people=["Mike", "John", "Laurence", "Larry", "Kim", "Joana",
+                       "Lisa", "Janet", "Jane"];
+            var key;
+            
+            function start(){
+                if(document.querySelector('#sBtn').value == 'Start'){
+                   document.querySelector('#sBtn').value = 'Stop';
+                   }
+                else{
+                    document.querySelector('#sBtn').value = 'Start';
+                }
+                myArray = people.slice();
+                shuffleArray(myArray);
+                //console.log(myArray);
+                build();
+                //document.getElementById('message1').innerHTML = '<h4>Find <span style="color:blue">'+key+'</span></h4>';
+                findPerson();
+            }
+            function build(){
+                var html = "";                
+                var x=0;
+                for(x=0; x<myArray.length; x++){
+                    var str = myArray[x];
+                    var shuffled = str.split("").sort(function(){
+                        return 0.5-Math.random()
+                    }).join("");
+                    var text = "Hidden "+(x+1);
+//                    html+='<div class="box" onmouseover="uText(this, \''+shuffled+'\')" onmouseout="oText()">Hidden '+                            (x+1)+'</div>';
+                    html+='<div class="box" onclick="check(this, \''+str+'\')" onmouseover="uText(this, \''+shuffled+'\')" onmouseout="oText(this, \''+text+'\')">'+text+'</div>';
+
+                }
+                //console.log(html);
+                document.getElementById('output').innerHTML=html;
+            }
+            function uText(t, mes){
+                t.innerHTML=mes;
+            }
+            function oText(t, mes){
+                t.innerHTML=mes;
+            }
+            function findPerson(){
+                key = myArray[Math.floor(Math.random()*myArray.length)];
+                if(myArray.length >0){
+                    document.getElementById('message1').innerHTML = '<h4>Find <span style="color:blue">'+key+'</span></h4>';
+                }
+                else{
+                    document.getElementById('message1').innerHTML = '<h4 style="color: purple">Thank you for playing</h4>';
+                }
+            }
+            function check(t, s){
+                if(s==key){
+                    document.getElementById('message2').innerHTML = '<h3 style="color: green">Correct!</h3>';
+                    var ind = myArray.indexOf(key);
+                    myArray.splice(ind, 1);
+                    t.parentNode.removeChild(t);
+                    findPerson();
+                }
+                else{
+                    document.getElementById('message2').innerHTML = '<h3 style="color: red">Wrong!</h3>';
+                }               
+                //document.querySelector('#sBtn').value = 'Stop';
+            }
+            //Randomize array
+            function shuffleArray(array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+    }
+}
+        </script>
+    </body>
+</html>
